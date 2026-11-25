@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-25",
+  "tools": {
+    "orca": {
+      "version": "1.4.274",
+      "macos": {
+        "kind": "brew-cask",
+        "cask": "stablyai/orca/orca"
+      }
+    },
+    "codebaseMemory": {
+      "version": "0.12.1",
+      "assets": {
+        "darwin-arm64": {
+          "url": "https://github.com/DeusData/codebase-memory-mcp/releases/download/v0.12.1/codebase-memory-mcp-darwin-arm64.tar.gz",
+          "sha256": "9bfcbe38414b47969a3e1d1c1999f5357409387c86fa3d24221b5458267660d2",
+          "format": "tar.gz",
+          "binaryPath": "codebase-memory-mcp"
+        },
+        "darwin-x64": {
+          "url": "https://github.com/DeusData/codebase-memory-mcp/releases/download/v0.12.1/codebase-memory-mcp-darwin-amd64.tar.gz",
+          "sha256": "ca6e64397a8ae80cec898a8205a6aa16750ac798acc05a0c3ed983837944a581",
+          "format": "tar.gz",
+          "binaryPath": "codebase-memory-mcp"
+        },
+        "linux-x64": {
+          "url": "https://github.com/DeusData/codebase-memory-mcp/releases/download/v0.12.1/codebase-memory-mcp-linux-amd64.tar.gz",
+          "sha256": "8453015145f072c1b9b019cbdd02cea8cc6f18cc5e116036dd20992631c638c7",
+          "format": "tar.gz",
+          "binaryPath": "codebase-memory-mcp"
+        },
+        "linux-arm64": {
+          "url": "https://github.com/DeusData/codebase-memory-mcp/releases/download/v0.12.1/codebase-memory-mcp-linux-arm64.tar.gz",
+          "sha256": "8575f126092660b93b170bdc2e06f3ef2dd28d3cc49ad6d0895dc3e4767219cd",
+          "format": "tar.gz",
+          "binaryPath": "codebase-memory-mcp"
+        },
+        "win32-x64": {
+          "url": "https://github.com/DeusData/codebase-memory-mcp/releases/download/v0.12.1/codebase-memory-mcp-windows-amd64.zip",
+          "sha256": "4e4e0f16b45233af5c757a1fcbe3c3b16e9056375b1fbe2ce020b6de75dedcc0",
+          "format": "zip",
+          "binaryPath": "codebase-memory-mcp.exe"
+        },
+        "win32-arm64": {
+          "url": "https://github.com/DeusData/codebase-memory-mcp/releases/download/v0.12.1/codebase-memory-mcp-windows-arm64.zip",
+          "sha256": "934ab6bd67a76c6ebd9e110d87b7090ffd629919bedaeddabe5a19175038b063",
+          "format": "zip",
+          "binaryPath": "codebase-memory-mcp.exe"
+        }
+      }
+    },
+    "superpowers": {
+      "repository": "https://github.com/obra/superpowers.git",
+      "revision": "22f0b463e7a5e579904dd6211a520321035526f7"
+    }
+  },
+  "observedCliVersions": {
+    "node": "22.23.1",
+    "opencode": "1.18.29",
+    "codex": "0.172.0",
+    "vibe": "3.1.4",
+    "freebuff": "0.2.38"
+  }
+}

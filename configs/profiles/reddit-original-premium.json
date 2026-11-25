@@ -1,0 +1,41 @@
+{
+  "id": "reddit-original-premium",
+  "description": "R\u00e9f\u00e9rence Reddit : Opus orchestre, DeepSeek API code, Sonnet UI. Acc\u00e8s premium d\u00e9sactiv\u00e9s.",
+  "default": false,
+  "roles": {
+    "orchestrator": {
+      "provider": "claude_api",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "medium"
+    },
+    "worker": {
+      "provider": "deepseek_api",
+      "agent": "opencode",
+      "model": "deepseek/deepseek-v4.1-flash-1017",
+      "effort": "max"
+    },
+    "ui": {
+      "provider": "claude_api",
+      "agent": "claude",
+      "model": "claude-sonnet-5-5",
+      "effort": "medium"
+    }
+  },
+  "opencode": {
+    "plugin": [
+      "superpowers@git+https://github.com/obra/superpowers.git#22f0b463e7a5e579904dd6211a520321035526f7"
+    ],
+    "mcp": {
+      "codebase-memory": {
+        "type": "local",
+        "command": [
+          "codebase-memory-mcp"
+        ],
+        "enabled": true
+      }
+    }
+  },
+  "disabled": true,
+  "reason": "Archive de r\u00e9f\u00e9rence ; acc\u00e8s API et facturation \u00e0 v\u00e9rifier avant adaptation explicite."
+}

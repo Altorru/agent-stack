@@ -1,0 +1,41 @@
+{
+  "id": "reddit-original-cheap",
+  "description": "R\u00e9f\u00e9rence Reddit : orchestrateur API DeepSeek, workers Go. API d\u00e9sactiv\u00e9e par d\u00e9faut.",
+  "default": false,
+  "roles": {
+    "orchestrator": {
+      "provider": "deepseek_api",
+      "agent": "opencode",
+      "model": "deepseek/deepseek-v4.1-flash-1017",
+      "effort": "max"
+    },
+    "worker": {
+      "provider": "opencode_go",
+      "agent": "opencode",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "effort": "max"
+    },
+    "ui": {
+      "provider": "opencode_go",
+      "agent": "opencode",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "effort": "max"
+    }
+  },
+  "opencode": {
+    "plugin": [
+      "superpowers@git+https://github.com/obra/superpowers.git#22f0b463e7a5e579904dd6211a520321035526f7"
+    ],
+    "mcp": {
+      "codebase-memory": {
+        "type": "local",
+        "command": [
+          "codebase-memory-mcp"
+        ],
+        "enabled": true
+      }
+    }
+  },
+  "disabled": true,
+  "reason": "Archive de r\u00e9f\u00e9rence ; acc\u00e8s API et facturation \u00e0 v\u00e9rifier avant adaptation explicite."
+}

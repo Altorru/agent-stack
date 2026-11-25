@@ -1,0 +1,39 @@
+{
+  "id": "reddit-go-only",
+  "description": "Adaptation Go uniquement ; abonnement et connexion requis.",
+  "default": true,
+  "roles": {
+    "orchestrator": {
+      "provider": "opencode_go",
+      "agent": "opencode",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "effort": "max"
+    },
+    "worker": {
+      "provider": "opencode_go",
+      "agent": "opencode",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "effort": "max"
+    },
+    "ui": {
+      "provider": "opencode_go",
+      "agent": "opencode",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "effort": "max"
+    }
+  },
+  "opencode": {
+    "plugin": [
+      "superpowers@git+https://github.com/obra/superpowers.git#22f0b463e7a5e579904dd6211a520321035526f7"
+    ],
+    "mcp": {
+      "codebase-memory": {
+        "type": "local",
+        "command": [
+          "codebase-memory-mcp"
+        ],
+        "enabled": true
+      }
+    }
+  }
+}

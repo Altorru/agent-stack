@@ -1,0 +1,36 @@
+{
+  "providers": [
+    {
+      "id": "opencode_go",
+      "agent": "opencode",
+      "billing": "subscription",
+      "loginArgs": [
+        "auth",
+        "login"
+      ],
+      "enabledByDefault": true,
+      "modelPrefix": "opencode-go/"
+    },
+    {
+      "id": "deepseek_api",
+      "agent": "opencode",
+      "billing": "api",
+      "loginArgs": [
+        "auth",
+        "login"
+      ],
+      "enabledByDefault": false,
+      "modelPrefix": "deepseek/"
+    },
+    {
+      "id": "claude_api",
+      "agent": "claude",
+      "billing": "api",
+      "loginArgs": [
+        "auth",
+        "login"
+      ],
+      "enabledByDefault": false
+    }
+  ]
+}
