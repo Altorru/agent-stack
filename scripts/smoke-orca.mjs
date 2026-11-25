@@ -46,8 +46,8 @@ function settledStatus(receipt, id) {
   const found = values.find((status) => ['succeeded', 'completed', 'failed'].includes(status));
   return found === 'completed' ? 'succeeded' : found;
 }
-function taskFor(receipt, id) {
-  return objects(receipt).find((record) => record.dispatch_id === id && 'result' in record && 'status' in record);
+function taskFor(receipt, id, taskId) {
+  return objects(receipt).find((record) => (taskId ? record.id === taskId : record.dispatch_id === id) && 'result' in record && 'status' in record);
 }
 function markerInFinalOutput(receipt, task) {
   // A task spec/user prompt also contains the marker. Only reported results or assistant transcript records count.
@@ -169,7 +169,7 @@ async function main() {
     const read = await command('read', ['orchestration', 'worker-read', '--dispatch', dispatchId, '--source', 'auto', '--limit', '100'], { allowFailure: true });
     const tasks = await command('tasks', ['orchestration', 'task-list', '--run', runId, '--full'], { allowFailure: true });
     await command('list', ['orchestration', 'worker-list', ...(runId ? ['--run', runId] : []), '--limit', '10'], { allowFailure: true });
-    const task = taskFor(tasks.json, dispatchId);
+    const task = taskFor(tasks.json, dispatchId, identifier(shown.json, 'task'));
     const status = settledStatus(shown.json, dispatchId);
     let release;
     if (status) release = await command('release', ['orchestration', 'worker-release', '--dispatch', dispatchId], { allowFailure: true });

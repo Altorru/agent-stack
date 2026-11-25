@@ -22,3 +22,6 @@ Le premier passage des tests du dépôt comptait 11 tests réussis, avec des ex�
 - Douze tests du routeur passent ; tests bootstrap et protocole Orca passent. La CI de `main` a réussi les six combinaisons Linux/macOS/Windows × Node 22/24.
 - Lancement Orca corrigé : le shell avait une fonction Codex utilisant un dossier de compte alternatif. Le chemin absolu du binaire et le dossier Codex principal sont désormais explicités dans les paramètres Orca. Les alias des autres outils restent disponibles.
 - Le premier worker utilisant le compte alternatif a échoué ; le test suivant, avec le compte principal et son MCP, a réussi. La vérification est conservée dans les reçus locaux ignorés par Git.
+
+- Essai de code réel : Vibe a corrigé uniquement la fonction d’addition dans un dépôt temporaire. Les commandes de test demandaient une autorisation indisponible en headless ; le coordinateur a exécuté `node --test` et confirmé la réussite. Les tâches Vibe peuvent donc produire le changement, avec une vérification confiée au coordinateur quand une commande demande une autorisation.
+- CI de la variante `multi-subscriptions` : les six jobs ont réussi. Les tests du protocole Orca simulés s’exécutent sur POSIX ; Windows vérifie les garde-fous et la gestion de configuration, les lancements réels restant réservés à WSL2.
