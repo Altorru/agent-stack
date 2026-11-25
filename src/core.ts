@@ -14,7 +14,8 @@ export interface Context { root: string; home: string; env: NodeJS.ProcessEnv; p
 export class UserError extends Error {}
 const agents = new Set<Agent>(['opencode', 'codex', 'vibe', 'freebuff', 'claude']);
 export function context(): Context {
-  return {root: process.env.AGENT_STACK_ROOT || path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), home: process.env.AGENT_STACK_HOME || path.join(homedir(), '.config', 'agent-stack'), env: {...process.env}};
+  const env = {...process.env, PATH: path.dirname(process.execPath) + path.delimiter + (process.env.PATH || '')};
+  return {root: process.env.AGENT_STACK_ROOT || path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), home: process.env.AGENT_STACK_HOME || path.join(homedir(), '.config', 'agent-stack'), env};
 }
 export function json(file: string): any { try { return JSON.parse(readFileSync(file, 'utf8')); } catch { throw new UserError(`Cannot read valid JSON: ${file}`); } }
 export function providers(ctx: Context): Provider[] {
