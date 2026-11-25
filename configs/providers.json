@@ -8,7 +8,7 @@
         "auth",
         "login"
       ],
-      "enabledByDefault": true,
+      "enabledByDefault": false,
       "modelPrefix": "opencode-go/"
     },
     {
@@ -31,6 +31,33 @@
         "login"
       ],
       "enabledByDefault": false
+    },
+    {
+      "id": "codex_chatgpt",
+      "agent": "codex",
+      "billing": "subscription",
+      "loginArgs": [
+        "login"
+      ],
+      "enabledByDefault": true
+    },
+    {
+      "id": "mistral_vibe",
+      "agent": "vibe",
+      "billing": "subscription",
+      "loginArgs": [
+        "--setup"
+      ],
+      "enabledByDefault": true
+    },
+    {
+      "id": "freebuff",
+      "agent": "freebuff",
+      "billing": "free",
+      "loginArgs": [
+        "login"
+      ],
+      "enabledByDefault": true
     }
   ]
 }

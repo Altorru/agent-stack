@@ -2,6 +2,8 @@
 
 Un environnement de développement agentique reproductible, principalement pour macOS : Orca pour superviser les agents, `agentctl` pour choisir un profil et lancer les CLI installées, Codebase Memory pour explorer le code et Superpowers pour guider le travail.
 
+Cette branche active **Codex + Mistral Vibe**, avec Freebuff disponible pour les projets publics. Voir [les profils et comptes](docs/MULTI_SUBSCRIPTIONS.md).
+
 Le projet utilise [Orca](https://github.com/stablyai/orca) comme dépendance externe. `agentctl run` lance un agent autonome ; le workflow de délégation Orca est décrit dans [le guide Orca](docs/ORCA.md).
 
 ## Installer
@@ -9,7 +11,7 @@ Le projet utilise [Orca](https://github.com/stablyai/orca) comme dépendance ext
 Prérequis : Git, Node.js 22 ou plus et npm. Sur macOS, Homebrew est nécessaire pour installer Orca automatiquement.
 
 ```bash
-git clone https://github.com/Altorru/agent-stack.git
+git clone --branch multi-subscriptions https://github.com/Altorru/agent-stack.git
 cd agent-stack
 ./scripts/bootstrap.sh --with-tools
 export PATH="$HOME/.local/bin:$PATH"
@@ -30,7 +32,7 @@ Windows : `./scripts/bootstrap.ps1` depuis PowerShell installe la gestion des pr
 ```bash
 agentctl status
 agentctl profile list
-agentctl profile use reddit-go-only
+agentctl profile use codex-vibe-free
 agentctl provider list
 ```
 

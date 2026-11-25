@@ -27,4 +27,5 @@ jobs:
       - run: npm run build
       - run: npm test
       - run: node scripts/test-bootstrap.mjs
+      - run: node scripts/test-smoke-orca.mjs
       - run: node dist/cli.js --help

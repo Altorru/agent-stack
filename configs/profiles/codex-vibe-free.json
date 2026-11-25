@@ -1,0 +1,25 @@
+{
+  "id": "codex-vibe-free",
+  "description": "Codex coordonne et r\u00e9vise, Vibe impl\u00e9mente ; Freebuff en profil public s\u00e9par\u00e9.",
+  "roles": {
+    "orchestrator": {
+      "provider": "codex_chatgpt",
+      "agent": "codex",
+      "model": "gpt-6-luna",
+      "effort": "medium"
+    },
+    "worker": {
+      "provider": "mistral_vibe",
+      "agent": "vibe",
+      "model": "mistral-large-4-0",
+      "effort": "medium"
+    },
+    "ui": {
+      "provider": "codex_chatgpt",
+      "agent": "codex",
+      "model": "gpt-6-luna",
+      "effort": "medium"
+    }
+  },
+  "default": true
+}

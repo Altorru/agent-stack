@@ -16,7 +16,7 @@ Réinstaller sur un Mac une stack native supervisée par Orca, choisir facilemen
 
 - CLI `agentctl` en TypeScript sur Node.js 22 ou plus.
 - Profils JSON et registre de fournisseurs versionnés.
-- Bootstrap Bash pour macOS/Linux et PowerShell pour Windows.
+- Bootstrap Bash pour macOS/Linux et PowerShell pour la gestion native des profils Windows ; exécution des agents sous WSL2.
 - Orca upstream, Codebase Memory natif et Superpowers fixé à un commit.
 - État et reçus JSONL locaux, sans secrets ni contenu des tâches.
 - Tests unitaires et d'intégration avec outils simulés, puis contrôles natifs et essai réel sur un dépôt de démonstration.

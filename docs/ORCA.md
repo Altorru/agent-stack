@@ -48,3 +48,9 @@ Chaque tâche doit préciser l'objectif, les fichiers autorisés, les contrainte
 - Les authentifications et quotas des CLI restent ceux de leurs fournisseurs.
 - La collection privée « Dream Design Team » de l'auteur Reddit n'est pas fournie. Les consignes de revue UI sont une adaptation locale.
 - Un runtime démarré n'est pas encore un test de bout en bout d'un worker. Le test doit montrer un reçu de lancement, un résultat et sa vérification.
+
+## Éviter les divergences de compte
+
+Dans Paramètres → Agents → Codex, définir le chemin absolu du vrai binaire (`command -v codex`) et un environnement `CODEX_HOME` pointant vers la configuration principale souhaitée. Cela évite une fonction de shell qui sélectionnerait un autre compte. Ne recopier aucun jeton ni fichier d’authentification dans Git. Vérifier ensuite le modèle et les MCP dans une nouvelle session Orca.
+
+Le test local utilise GPT-6-Luna medium, le même modèle que les profils Codex de cette branche. Les commandes de contrôle Orca peuvent demander une autorisation ponctuelle pour joindre le runtime local depuis le sandbox Codex ; approuver la commande précise conserve les autres protections.

@@ -1,0 +1,24 @@
+{
+  "id": "freebuff-public",
+  "description": "Worker Freebuff interactif pour projets publics avec autorisation explicite.",
+  "roles": {
+    "orchestrator": {
+      "provider": "codex_chatgpt",
+      "agent": "codex",
+      "model": "gpt-6-luna",
+      "effort": "medium"
+    },
+    "worker": {
+      "provider": "freebuff",
+      "agent": "freebuff",
+      "model": "native-default"
+    },
+    "ui": {
+      "provider": "codex_chatgpt",
+      "agent": "codex",
+      "model": "gpt-6-luna",
+      "effort": "medium"
+    }
+  },
+  "default": false
+}

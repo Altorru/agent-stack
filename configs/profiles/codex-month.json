@@ -1,0 +1,25 @@
+{
+  "id": "codex-month",
+  "description": "Tous les r\u00f4les avec la connexion native ChatGPT Codex.",
+  "roles": {
+    "orchestrator": {
+      "provider": "codex_chatgpt",
+      "agent": "codex",
+      "model": "gpt-6-luna",
+      "effort": "medium"
+    },
+    "worker": {
+      "provider": "codex_chatgpt",
+      "agent": "codex",
+      "model": "gpt-6-luna",
+      "effort": "medium"
+    },
+    "ui": {
+      "provider": "codex_chatgpt",
+      "agent": "codex",
+      "model": "gpt-6-luna",
+      "effort": "medium"
+    }
+  },
+  "default": false
+}

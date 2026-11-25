@@ -1,0 +1,25 @@
+{
+  "id": "mistral-month",
+  "description": "Tous les r\u00f4les avec le compte natif Mistral Vibe.",
+  "roles": {
+    "orchestrator": {
+      "provider": "mistral_vibe",
+      "agent": "vibe",
+      "model": "mistral-large-4-0",
+      "effort": "medium"
+    },
+    "worker": {
+      "provider": "mistral_vibe",
+      "agent": "vibe",
+      "model": "mistral-large-4-0",
+      "effort": "medium"
+    },
+    "ui": {
+      "provider": "mistral_vibe",
+      "agent": "vibe",
+      "model": "mistral-large-4-0",
+      "effort": "medium"
+    }
+  },
+  "default": false
+}

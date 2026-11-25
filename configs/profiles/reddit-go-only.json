@@ -1,7 +1,7 @@
 {
   "id": "reddit-go-only",
   "description": "Adaptation Go uniquement ; abonnement et connexion requis.",
-  "default": true,
+  "default": false,
   "roles": {
     "orchestrator": {
       "provider": "opencode_go",
