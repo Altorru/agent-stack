@@ -2,7 +2,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
-import { context, providers, profiles, state, saveState, activeProfile, enabled, installed, runCommand, plan, launch, rollback, assertNativeExecutionSupported, executable, UserError, type Context } from './core.js';
+import { context, providers, profiles, state, saveState, activeProfile, enabled, installed, runCommand, plan, launch, rollback, assertNativeExecutionSupported, executable, verifyVibeAccess, UserError, type Context } from './core.js';
 
 const help=`agentctl — reproducible native coding agents
 
@@ -52,9 +52,10 @@ async function doctor(ctx:Context,asJSON:boolean):Promise<number> {
       checks.push({name:`${name}:model`,ok:available,detail:available?`${role.model} in native catalog`:`${role.model} unavailable; configure native authentication and verify the model ID`});
     }
     if(role.agent==='codex'&&provider?.billing==='subscription'&&installed(ctx,'codex').ok){const r=runCommand(ctx,'codex',['login','status']);checks.push({name:`${name}:auth`,ok:r.status===0&&/chatgpt/i.test(r.stdout+' '+r.stderr),detail:r.status===0&&/chatgpt/i.test(r.stdout+' '+r.stderr)?'ChatGPT login verified':'ChatGPT login unverified; run provider login'});}
+    if(role.agent==='vibe'&&provider?.billing==='subscription'&&installed(ctx,'vibe').ok){try{const result=verifyVibeAccess(ctx,role,ctx.root,ctx.env);checks.push({name:`${name}:auth`,ok:true,detail:`Native ${result.plan_type} access verified for ${result.model}; paid Vibe entitlement ${result.paid_vibe?'present':'not asserted'}`});}catch{checks.push({name:`${name}:auth`,ok:false,detail:'Vibe Chat/Mistral Code access could not be verified; API and unknown plans are blocked.'});}}
   }
   const ok=checks.every(c=>c.ok)&&!p.disabled;
-  const result={ok,profile:p.id,checks,notes:['No model completion or payment was requested.','Catalog availability does not prove subscription quota or billing balance.','Vibe and Freebuff credentials require native verification.']};
+  const result={ok,profile:p.id,checks,notes:['No model completion or payment was requested.','Catalog availability does not prove subscription quota or billing balance.','Vibe plan is checked live using native credentials; Freebuff requires native verification.']};
   if(asJSON)out(result);else{console.log(`Profile: ${p.id}`);for(const c of checks)console.log(`${c.ok?'OK':'BLOCKED'} ${c.name}: ${c.detail}`);console.log('No model completion or payment requested.');}
   return ok?0:1;
 }

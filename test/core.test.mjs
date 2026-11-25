@@ -17,7 +17,9 @@ function fixture(t,agent='opencode',billing='subscription') {
  const env={...process.env,PATH:bin+path.delimiter+process.env.PATH,FAKE_CAPTURE:path.join(root,'capture.json'),OPENAI_API_KEY:'should-not-leak',CODEX_API_KEY:'should-not-leak'};
  const script=`const fs=require('fs');const args=process.argv.slice(2);if(args[0]==='--version'){console.log('fake 1.0');process.exit(0);}if(args[0]==='debug'){let c=JSON.parse(process.env.OPENCODE_CONFIG_CONTENT||'{}');c.agent={build:{model:'expensive/other'},...c.agent};if(process.env.FAKE_AGENT_MISMATCH)c.agent['agent-stack-managed'].model='expensive/other';if(process.env.FAKE_AGENT_EFFORT)c.agent['agent-stack-managed'].options.reasoningEffort='low';if(process.env.FAKE_MISMATCH)c.model='other/model';if(process.env.FAKE_EFFORT)c.provider['opencode-go'].models['deepseek-v4.1-flash'].options.reasoningEffort='low';console.log(JSON.stringify(c));process.exit(0);}if(args[0]==='models'){if(process.env.FAKE_NO_MODEL){process.exit(1);}console.log('opencode-go/deepseek-v4.1-flash');process.exit(0);}if(args[0]==='login'){console.log(process.env.FAKE_API_LOGIN?'Logged in with API key':'Logged in using ChatGPT');process.exit(0);}fs.writeFileSync(process.env.FAKE_CAPTURE,JSON.stringify({args,hasKey:!!process.env.OPENAI_API_KEY,hasCodexKey:!!process.env.CODEX_API_KEY,config:JSON.parse(process.env.OPENCODE_CONFIG_CONTENT||'{}')}));process.exit(Number(process.env.FAKE_EXIT||0));`;
  const scriptPath=path.join(bin,agent+'.cjs');writeFileSync(scriptPath,script);
- return {root,home,project,bin,env,model,executables:{[agent]:{command:process.execPath,args:[scriptPath]}}};
+ const accessScript=path.join(bin,'vibe-access.cjs');
+ writeFileSync(accessScript,`const x=process.env.FAKE_VIBE_ACCESS;console.log(x||JSON.stringify({ok:true,plan_type:'chat',plan_name:'INDIVIDUAL',paid_vibe:false,auth_mode:'api_key',model:process.argv[2],effort:process.argv[3]||null}));process.exit(Number(process.env.FAKE_VIBE_ACCESS_EXIT||0));`);
+ return {root,home,project,bin,env,model,executables:{[agent]:{command:process.execPath,args:[scriptPath]},'vibe-access':{command:process.execPath,args:[accessScript]}}};
 }
 
 test('default selection and rollback restore local provider state',t=>{
@@ -75,6 +77,18 @@ test('Codex subscription launch removes API credentials and verifies ChatGPT aut
 test('Vibe uses supported workdir/model/headless prompt arguments',t=>{
  const c=fixture(t,'vibe');const l=plan(c,{project:c.project,task:'hello world'});
  assert.deepEqual(l.args,['--workdir',c.project,'--model','devstral','--time-limit','600','--max-turns','30','--prompt','hello world']);
+});
+test('Vibe subscription accepts Chat quota without paid entitlement and blocks API or unknown access',t=>{
+ const c=fixture(t,'vibe');const l=plan(c,{project:c.project,task:'hello'});
+ verifyLaunch(c,l);
+ for(const result of [
+  {ok:true,plan_type:'api',model:'devstral'},
+  {ok:true,plan_type:'unknown',model:'devstral'},
+  {ok:false,plan_type:'chat',model:'devstral'},
+  {ok:true,plan_type:'chat',model:'different-alias'},
+ ])assert.throws(()=>verifyLaunch(c,{...l,env:{...l.env,FAKE_VIBE_ACCESS:JSON.stringify(result)}}),/Vibe access/);
+ assert.throws(()=>verifyLaunch(c,{...l,env:{...l.env,FAKE_VIBE_ACCESS_EXIT:'2'}}),/Vibe access/);
+ assert.equal(existsSync(c.env.FAKE_CAPTURE),false);
 });
 test('CLI dry run does not launch models and unknown options fail',t=>{
  const c=fixture(t);const cli=path.resolve('dist/cli.js');const env={...c.env,AGENT_STACK_HOME:c.home,AGENT_STACK_ROOT:c.root};

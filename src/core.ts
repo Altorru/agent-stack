@@ -1,5 +1,5 @@
 import { spawnSync, spawn } from 'node:child_process';
-import { existsSync, readFileSync, writeFileSync, mkdirSync, renameSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, renameSync, readdirSync, statSync, realpathSync } from 'node:fs';
 import { homedir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -75,6 +75,30 @@ export function installed(ctx: Context, agent: string): {ok:boolean;version:stri
   const r=runCommand(ctx,agent,['--version']);
   return {ok:r.status===0,version:r.status===0?r.stdout.trim().split('\n')[0]||'installed':'not installed or unavailable'};
 }
+export interface VibeAccess { ok:boolean; plan_type?:string; plan_name?:string; paid_vibe?:boolean; auth_mode?:string; model?:string; effort?:string|null }
+function vibePython(ctx:Context,env:NodeJS.ProcessEnv):string {
+  const explicit=env.AGENT_STACK_VIBE_PYTHON;
+  if(explicit){if(!path.isAbsolute(explicit)||!existsSync(explicit))throw new UserError('Vibe access verification needs a valid absolute AGENT_STACK_VIBE_PYTHON path.');return explicit;}
+  for(const entry of (env.PATH||'').split(path.delimiter)){
+    const candidate=path.join(entry,'vibe');if(!existsSync(candidate))continue;
+    try{const first=readFileSync(realpathSync(candidate),'utf8').split(/\r?\n/,1)[0]||'';
+      const match=/^#!(\/[^\r\n]+\/python(?:\d+(?:\.\d+)*)?)$/.exec(first);
+      if(match?.[1]&&existsSync(match[1]))return match[1];
+    }catch{}
+    break;
+  }
+  throw new UserError('Vibe access verification cannot resolve its Python environment. Set AGENT_STACK_VIBE_PYTHON to the installed Vibe interpreter.');
+}
+export function verifyVibeAccess(ctx:Context,role:Role,project:string,env:NodeJS.ProcessEnv):VibeAccess {
+  assertNativeExecutionSupported(ctx);
+  const args=[role.model,...(role.effort?[role.effort]:[])];
+  let runner=ctx;
+  if(!ctx.executables?.['vibe-access'])runner={...ctx,executables:{...ctx.executables,'vibe-access':{command:vibePython(ctx,env),args:[path.join(ctx.root,'scripts','vibe-access.py')]}}};
+  const probe=runCommand(runner,'vibe-access',args,project,env);
+  let result:VibeAccess;try{result=JSON.parse(probe.stdout);}catch{throw new UserError('Vibe access verification failed; no model launched. Use native Vibe setup to verify Chat/Mistral Code access.');}
+  if(probe.status!==0||result.ok!==true||!['chat','mistral_code'].includes(result.plan_type||'')||result.model!==role.model||(role.effort&&result.effort!==role.effort))throw new UserError('Vibe access is not verified for this model on a Chat/Mistral Code plan. API or unknown access is blocked; no fallback performed.');
+  return result;
+}
 function parseOutputJSON(output: string): any { try{return JSON.parse(output);}catch { const start=output.indexOf('{'), end=output.lastIndexOf('}'); if(start>=0 && end>start) try{return JSON.parse(output.slice(start,end+1));}catch{} throw new UserError('OpenCode returned invalid effective configuration JSON. No agent launched.'); } }
 export interface Launch { command: Agent; args: string[]; env: NodeJS.ProcessEnv; project: string; role: Role; profile: string; manualTask: boolean; managedConfig?: Record<string,unknown> }
 export interface RunOptions { project:string;task:string;role?:string;allowPaid?:boolean;allowFreebuff?:boolean;publicProject?:boolean }
@@ -141,6 +165,7 @@ export function verifyLaunch(ctx:Context,launch:Launch): void {
     const auth=runCommand(ctx,'codex',['login','status'],launch.project,launch.env);
     if(auth.status!==0 || !/chatgpt/i.test(auth.stdout+' '+auth.stderr)) throw new UserError('Codex ChatGPT authentication is not verified. Run agentctl provider login '+launch.role.provider+'. No API fallback performed.');
   }
+  if(launch.command==='vibe'&&providers(ctx).find(p=>p.id===launch.role.provider)?.billing==='subscription')verifyVibeAccess(ctx,launch.role,launch.project,launch.env);
 }
 export function record(ctx:Context,entry:Record<string,unknown>): void {
   mkdirSync(ctx.home,{recursive:true,mode:0o700});
