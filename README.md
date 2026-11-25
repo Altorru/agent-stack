@@ -13,13 +13,14 @@ git clone https://github.com/Altorru/agent-stack.git
 cd agent-stack
 ./scripts/bootstrap.sh --with-tools
 export PATH="$HOME/.local/bin:$PATH"
+node scripts/configure-agents.mjs
 agentctl doctor
 agentctl profile list
 ```
 
-Le bootstrap installe les dépendances npm verrouillées, compile la CLI et crée un lanceur dans `~/.local/bin`. `--with-tools` ajoute les outils upstream gérés. Les configurations natives et les exécutables déjà présents sont conservés. L'installation des outils et la connexion aux comptes sont deux étapes distinctes.
+Le bootstrap installe les dépendances npm verrouillées, compile la CLI et crée un lanceur dans `~/.local/bin`. `--with-tools` ajoute les outils upstream gérés. Le script `configure-agents.mjs`, exécuté ensuite avec Codex, Vibe et Orca installés, sauvegarde les configurations natives, enregistre Codebase Memory dans Codex et Vibe, puis installe les guides Orca et les liens de skills Superpowers. Les skills existants sont conservés. L'installation des outils et la connexion aux comptes sont deux étapes distinctes.
 
-Windows : `./scripts/bootstrap.ps1 -WithTools` depuis PowerShell, avec Node.js et Git disponibles. Le lanceur est `~/.local/bin/agentctl.cmd` ; ajouter ce dossier au `PATH`. Orca requiert son installeur natif sur Windows et Linux. Les intégrations propres à chaque agent doivent être vérifiées sur ces plateformes.
+Windows : `./scripts/bootstrap.ps1` depuis PowerShell installe la gestion des profils, les diagnostics et les prévisualisations `--dry-run`. Le lanceur est `~/.local/bin/agentctl.cmd` ; ajouter ce dossier au `PATH`. Les lancements réels d'agents, `update --apply` et `configure-agents.mjs` se font depuis un checkout Linux dans WSL2. Orca requiert son installeur natif sur Windows et Linux ; ces plateformes n'ont pas été validées de bout en bout.
 
 ## Choisir une configuration
 

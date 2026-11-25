@@ -24,6 +24,14 @@ Remplacer `<identifiant>` par une valeur de `provider list`. Les fournisseurs di
 
 ## Vérifier la mémoire et les skills
 
+Après le bootstrap et avec Codex, Vibe et Orca installés, configurer les intégrations natives sur macOS ou Linux :
+
+```bash
+node scripts/configure-agents.mjs
+```
+
+Le script sauvegarde les configurations Codex/Vibe dans `~/.config/agent-stack/backups/native`, enregistre le MCP Codebase Memory, installe les guides Orca CLI/orchestration et ajoute les liens vers les skills Superpowers. Il conserve les skills déjà présents. Sur Windows natif, il s'arrête avant modification : utiliser WSL2.
+
 ```bash
 codebase-memory-mcp --version
 node scripts/install-upstream.mjs --check all
@@ -61,4 +69,4 @@ node scripts/link-cli.mjs uninstall
 
 La première commande restaure une sauvegarde d'état gérée. La seconde retire uniquement le lanceur marqué comme appartenant au projet. Les comptes natifs, le dépôt et les fichiers du projet de travail sont conservés. Les outils upstream installés restent présents ; les supprimer séparément si souhaité.
 
-`agentctl update --check` fournit les informations de mise à jour disponibles. `--apply` ne doit être utilisé qu'après lecture de ce contrôle et avec un dépôt propre ; il ne constitue pas une mise à jour générale de tous les abonnements et CLI.
+`agentctl update --check` fournit les informations de mise à jour disponibles. `--apply` ne doit être utilisé qu'après lecture de ce contrôle et avec un dépôt propre ; il ne constitue pas une mise à jour générale de tous les abonnements et CLI. Sous Windows natif, `--apply` et les lancements réels d'agents sont refusés avant mutation ; effectuer ces opérations dans le checkout Linux de WSL2. La configuration, les diagnostics et `--dry-run` restent disponibles nativement.
